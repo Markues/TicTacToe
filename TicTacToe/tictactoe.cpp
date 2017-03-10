@@ -1,9 +1,3 @@
-//
-//  Created by Jeff Farris on 3/4/17.
-//  Copyright © 2017 Markues. All rights reserved.
-//
-
-// Using SDL, SDL_image, standard IO, and strings
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <stdio.h>
