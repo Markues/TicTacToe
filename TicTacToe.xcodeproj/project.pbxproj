@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		802836AF1E6BB17600FB0988 /* tictactoe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802836AE1E6BB17600FB0988 /* tictactoe.cpp */; };
+		802836AF1E6BB17600FB0988 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802836AE1E6BB17600FB0988 /* main.cpp */; };
 		802836B81E6BB18F00FB0988 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 802836B61E6BB18F00FB0988 /* SDL2_image.framework */; };
 		802836B91E6BB18F00FB0988 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 802836B71E6BB18F00FB0988 /* SDL2.framework */; };
+		802836BE1E725BD900FB0988 /* lTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802836BD1E725BD900FB0988 /* lTexture.cpp */; };
+		802836C11E725E0C00FB0988 /* globals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802836C01E725E0C00FB0988 /* globals.cpp */; };
+		802836C41E72625300FB0988 /* functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802836C31E72625300FB0988 /* functions.cpp */; };
+		802836C61E72638400FB0988 /* board.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802836C51E72638400FB0988 /* board.cpp */; };
+		802836C81E7263B800FB0988 /* move.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802836C71E7263B800FB0988 /* move.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,9 +31,18 @@
 
 /* Begin PBXFileReference section */
 		802836AB1E6BB17600FB0988 /* TicTacToe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TicTacToe; sourceTree = BUILT_PRODUCTS_DIR; };
-		802836AE1E6BB17600FB0988 /* tictactoe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tictactoe.cpp; sourceTree = "<group>"; };
+		802836AE1E6BB17600FB0988 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		802836B61E6BB18F00FB0988 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		802836B71E6BB18F00FB0988 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		802836BA1E72561600FB0988 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		802836BB1E7256FB00FB0988 /* classes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = classes.h; sourceTree = "<group>"; };
+		802836BC1E725A7100FB0988 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
+		802836BD1E725BD900FB0988 /* lTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lTexture.cpp; sourceTree = "<group>"; };
+		802836C01E725E0C00FB0988 /* globals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globals.cpp; sourceTree = "<group>"; };
+		802836C21E725EDF00FB0988 /* globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = globals.h; sourceTree = "<group>"; };
+		802836C31E72625300FB0988 /* functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = functions.cpp; sourceTree = "<group>"; };
+		802836C51E72638400FB0988 /* board.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = board.cpp; sourceTree = "<group>"; };
+		802836C71E7263B800FB0988 /* move.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = move.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +78,16 @@
 		802836AD1E6BB17600FB0988 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
-				802836AE1E6BB17600FB0988 /* tictactoe.cpp */,
+				802836AE1E6BB17600FB0988 /* main.cpp */,
+				802836C71E7263B800FB0988 /* move.cpp */,
+				802836C51E72638400FB0988 /* board.cpp */,
+				802836BB1E7256FB00FB0988 /* classes.h */,
+				802836BA1E72561600FB0988 /* constants.h */,
+				802836BC1E725A7100FB0988 /* functions.h */,
+				802836C31E72625300FB0988 /* functions.cpp */,
+				802836C21E725EDF00FB0988 /* globals.h */,
+				802836C01E725E0C00FB0988 /* globals.cpp */,
+				802836BD1E725BD900FB0988 /* lTexture.cpp */,
 			);
 			path = TicTacToe;
 			sourceTree = "<group>";
@@ -135,7 +158,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				802836AF1E6BB17600FB0988 /* tictactoe.cpp in Sources */,
+				802836C11E725E0C00FB0988 /* globals.cpp in Sources */,
+				802836C61E72638400FB0988 /* board.cpp in Sources */,
+				802836C81E7263B800FB0988 /* move.cpp in Sources */,
+				802836BE1E725BD900FB0988 /* lTexture.cpp in Sources */,
+				802836AF1E6BB17600FB0988 /* main.cpp in Sources */,
+				802836C41E72625300FB0988 /* functions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
