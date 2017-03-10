@@ -4,6 +4,8 @@
 // Starts up SDL and creates window
 bool init();
 
+int computePostion(int position);
+
 // Loads media
 bool loadMedia();
 
