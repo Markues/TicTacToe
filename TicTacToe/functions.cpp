@@ -69,8 +69,8 @@ bool loadMedia() {
 		success = false;
 	}
 	else {
-		for(int i = 0; i < NUM_ROWS; i++) {
-			for(int j = 0; j < NUM_COLS; j++) {
+		for(int i = 0; i < NUM_COLS; i++) {
+			for(int j = 0; j < NUM_ROWS; j++) {
 				gMoves[i][j].setPosition(computePostion(i), computePostion(j));
 				gMoves[i][j].setArrayPos(i, j);
 				gSpriteClips[i][j].x = computePostion(i);

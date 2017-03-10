@@ -16,10 +16,10 @@ extern LTexture gXTexture;
 extern LTexture gOTexture;
 
 // Mouse button sprites
-extern SDL_Rect gSpriteClips[NUM_ROWS][NUM_COLS];
+extern SDL_Rect gSpriteClips[NUM_COLS][NUM_ROWS];
 
 // Buttons objects
-extern Move gMoves[NUM_ROWS][NUM_COLS];
+extern Move gMoves[NUM_COLS][NUM_ROWS];
 
 extern bool isXTurn;
 

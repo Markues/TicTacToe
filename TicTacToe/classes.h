@@ -57,7 +57,7 @@ public:
 	Move();
 	
 	void setPosition(int x, int y);
-	void setArrayPos(int row, int col);
+	void setArrayPos(int col, int row);
 	
 	void handleEvent(SDL_Event* e);
 	

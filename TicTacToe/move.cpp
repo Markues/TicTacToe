@@ -16,7 +16,7 @@ void Move::setPosition(int x, int y) {
 	mPosition.y = y;
 }
 
-void Move::setArrayPos(int row, int col) {
+void Move::setArrayPos(int col, int row) {
 	rowNum = row;
 	colNum = col;
 }
@@ -58,7 +58,7 @@ void Move::render() {
 			gOTexture.render(mPosition.x, mPosition.y);
 			break;
 		case NO_SPRITE:
-			SDL_RenderDrawRect(gRenderer, &gSpriteClips[rowNum][colNum]);
+			SDL_RenderDrawRect(gRenderer, &gSpriteClips[colNum][rowNum]);
 			break;
 	}
 }

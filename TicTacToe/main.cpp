@@ -37,8 +37,8 @@ int main(int argc, char* args[]) {
 					}
 					
 					// Handle button events
-					for(int i = 0; i < NUM_ROWS; i++) {
-						for(int j = 0; j < NUM_COLS; j++) {
+					for(int i = 0; i < NUM_COLS; i++) {
+						for(int j = 0; j < NUM_ROWS; j++) {
 							gMoves[i][j].handleEvent(&e);
 						}
 					}
@@ -51,8 +51,8 @@ int main(int argc, char* args[]) {
 				board.render();
 				
 				// Render Moves
-				for(int i = 0; i < NUM_ROWS; i++) {
-					for(int j = 0; j < NUM_COLS; j++) {
+				for(int i = 0; i < NUM_COLS; i++) {
+					for(int j = 0; j < NUM_ROWS; j++) {
 						gMoves[i][j].render();
 					}
 				}

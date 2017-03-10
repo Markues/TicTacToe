@@ -13,9 +13,9 @@ LTexture gXTexture;
 LTexture gOTexture;
 
 // Mouse button sprites
-SDL_Rect gSpriteClips[NUM_ROWS][NUM_COLS];
+SDL_Rect gSpriteClips[NUM_COLS][NUM_ROWS];
 
 // Buttons objects
-Move gMoves[NUM_ROWS][NUM_COLS];
+Move gMoves[NUM_COLS][NUM_ROWS];
 
 bool isXTurn = true;
