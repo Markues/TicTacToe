@@ -351,7 +351,6 @@ void Move::handleEvent(SDL_Event* e) {
 }
 
 void Move::render() {
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	switch (mCurrentSprite) {
 		case X_SPRITE:
 			gXTexture.render(mPosition.x, mPosition.y);
