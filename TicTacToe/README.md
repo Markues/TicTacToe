@@ -22,5 +22,6 @@ Some of this code is repurposed from Lazy Foo's tutorials.
 They can be found [here](http://lazyfoo.net/).
 
 ## License
-This code can only be used for personal use
+This code can only be used for personal use.
+
 No permission of use for commercial / money-making means
