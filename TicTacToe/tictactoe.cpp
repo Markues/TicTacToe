@@ -292,7 +292,7 @@ void Move::setArrayPos(int row, int col) {
 }
 
 void Move::handleEvent(SDL_Event* e) {
-	if(e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP) {
+	if(e->type == SDL_MOUSEBUTTONDOWN) {
 		// Get mouse position
 		int x, y;
 		SDL_GetMouseState(&x, &y);
@@ -300,51 +300,20 @@ void Move::handleEvent(SDL_Event* e) {
 		// Check if mouse is in button
 		bool inside = true;
 		
-		// Mouse is left of the button
-		if(x < mPosition.x) {
-			inside = false;
-		}
-		// Mouse is right of the button
-		else if(x > mPosition.x + MOVE_DIMENSION) {
-			inside = false;
-		}
-		// Mouse above the button
-		else if(y < mPosition.y) {
-			inside = false;
-		}
-		// Mouse below the button
-		else if(y > mPosition.y + MOVE_DIMENSION) {
+		if(x < mPosition.x || x > mPosition.x + MOVE_DIMENSION || y < mPosition.y || y > mPosition.y + MOVE_DIMENSION) {
 			inside = false;
 		}
 		
-		// Mouse is outside button
-		if(!inside) {
-			// Do nothing
-		}
-		// Mouse is inside button
-		else {
-			// Set mouse over sprite
-			switch(e->type) {
-				case SDL_MOUSEMOTION:
-					// Do nothing
-					break;
-					
-				case SDL_MOUSEBUTTONDOWN:
-					if(!isClicked) {
-						if(isXTurn) {
-							mCurrentSprite = X_SPRITE;
-						}
-						else {
-							mCurrentSprite = O_SPRITE;
-						}
-						isClicked = true;
-						isXTurn = !isXTurn;
-					}
-					break;
-					
-				case SDL_MOUSEBUTTONUP:
-					// Do nothing
-					break;
+		if(inside) {
+			if(!isClicked) {
+				if(isXTurn) {
+					mCurrentSprite = X_SPRITE;
+				}
+				else {
+					mCurrentSprite = O_SPRITE;
+				}
+				isClicked = true;
+				isXTurn = !isXTurn;
 			}
 		}
 	}
