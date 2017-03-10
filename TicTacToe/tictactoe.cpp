@@ -13,6 +13,19 @@
 const int SCREEN_WIDTH = 180;
 const int SCREEN_HEIGHT = 180;
 const int SCREEN_BORDER_SIZE = 20;
+const int MOVE_DIMENSION = 40;
+const int MOVE_OUTER_BORDER_SIZE = 2;
+const int MOVE_INNER_BORDER_SIZE = 6;
+const int NUM_ROWS = 3;
+const int NUM_COLS = 3;
+
+bool isXTurn = true;
+
+enum MoveSprite {
+	X_SPRITE = 0,
+	O_SPRITE = 1,
+	NO_SPRITE = 2
+};
 
 using namespace std;
 
@@ -62,22 +75,27 @@ class LTexture {
 	};
 
 class Move {
-public:
-	static const int MOVE_DIMENSION = 40;
-	static const int MOVE_BORDER_SIZE = 2;
+	public:
+		Move();
 	
-	Move(short row, short col);
- 
-	int computePostion(short position);
- 
-	void render();
+		void setPosition(int x, int y);
+		void setArrayPos(int row, int col);
 	
-private:
-	int xPos, yPos;
+		void handleEvent(SDL_Event* e);
+	 
+		void render();
+		
+	private:
+		// Top left position
+		SDL_Point mPosition;
 	
-	bool isEmpty;
- 
-	bool isX;
+		int rowNum;
+		int colNum;
+	
+		bool isClicked;
+	 
+		// Currently used global sprite
+		MoveSprite mCurrentSprite;
 };
 
 class Board {
@@ -86,50 +104,11 @@ class Board {
 	
 		Board();
 	
-		//void handleEvent(SDL_Event& e);
-	
-		void move(short row, short col);
-	
 		void render();
 	
 	private:
 		int xPos, yPos;
-	
-		Move* moveArray[3][3];
 };
-
-// The dot that will move around on the screen
-/*class Dot {
-	public:
-		// The dimensions of the dot
-		static const int DOT_WIDTH = 20;
-		static const int DOT_HEIGHT = 20;
-		
-		// Maximum axis velocity of the dot
-		static const int DOT_VEL = 10;
-		
-		// Initializes the variables
-		Dot();
-		
-		// Takes key presses and adjusts the dot's velocity
-		void handleEvent(SDL_Event& e);
-		
-		// Moves the dot and checks collision
-		void move(SDL_Rect& wall);
-		
-		// Shows the dot on the screen
-		void render();
-		
-	private:
-		// The X and Y offsets of the dot
-		int mPosX, mPosY;
-		
-		// The velocity of the dot
-		int mVelX, mVelY;
-		
-		// Dot's collision box
-		SDL_Rect mCollider;
-	};*/
 
 // Starts up SDL and creates window
 bool init();
@@ -140,9 +119,6 @@ bool loadMedia();
 // Frees media and shuts down SDL
 void close();
 
-// Box collision detector
-//bool checkCollision(SDL_Rect a, SDL_Rect b);
-
 // The window we'll be rendering to
 SDL_Window* gWindow = NULL;
 
@@ -150,10 +126,15 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
 // Scene textures
-//LTexture gDotTexture;
 LTexture gBoardTexture;
-LTexture gXMoveTexture;
-LTexture gOMoveTexture;
+LTexture gXTexture;
+LTexture gOTexture;
+
+// Mouse button sprites
+SDL_Rect gSpriteClips[NUM_ROWS][NUM_COLS];
+
+// Buttons objects
+Move gMoves[NUM_ROWS][NUM_COLS];
 
 LTexture::LTexture() {
 	// Initialize
@@ -281,113 +262,107 @@ int LTexture::getHeight() {
 	return mHeight;
 }
 
-/*Dot::Dot() {
-	// Initialize the offsets
-	mPosX = 0;
-	mPosY = 0;
-	
-	// Set collision box dimension
-	mCollider.w = DOT_WIDTH;
-	mCollider.h = DOT_HEIGHT;
-	
-	// Initialize the velocity
-	mVelX = 0;
-	mVelY = 0;
-}*/
-
-int Move::computePostion(short position) {
-	return 20 + (position * MOVE_DIMENSION) + ((position + 1) * MOVE_BORDER_SIZE) + (position * 6);
-}
-
-Move::Move(short row, short col) {
-	xPos = computePostion(row);
-	yPos = computePostion(col);
-	
-	isEmpty = true;
-	isX = false;
-}
-
 Board::Board() {
 	xPos = SCREEN_BORDER_SIZE;
 	yPos = SCREEN_BORDER_SIZE;
-	for(short i = 0; i < 3; i++) {
-		for(short j = 0; j < 3; j++) {
-			moveArray[i][j] = new Move(i, j);
-		}
-	}
 }
-
-/*void Dot::handleEvent(SDL_Event& e) {
-	// If a key was pressed
-	if(e.type == SDL_KEYDOWN && e.key.repeat == 0) {
-		// Adjust the velocity
-		switch(e.key.keysym.sym) {
-			case SDLK_UP: mVelY -= DOT_VEL; break;
-			case SDLK_DOWN: mVelY += DOT_VEL; break;
-			case SDLK_LEFT: mVelX -= DOT_VEL; break;
-			case SDLK_RIGHT: mVelX += DOT_VEL; break;
-		}
-	}
-	// If a key was released
-	else if(e.type == SDL_KEYUP && e.key.repeat == 0) {
-		// Adjust the velocity
-		switch(e.key.keysym.sym) {
-			case SDLK_UP: mVelY += DOT_VEL; break;
-			case SDLK_DOWN: mVelY -= DOT_VEL; break;
-			case SDLK_LEFT: mVelX += DOT_VEL; break;
-			case SDLK_RIGHT: mVelX -= DOT_VEL; break;
-		}
-	}
-}*/
-
-/*void Dot::move(SDL_Rect& wall) {
-	// Move the dot left or right
-	mPosX += mVelX;
-	mCollider.x = mPosX;
-	
-	// If the dot collided or went too far to the left or right
-	if((mPosX < 0) || (mPosX + DOT_WIDTH > SCREEN_WIDTH) || checkCollision(mCollider, wall)) {
-		// Move back
-		mPosX -= mVelX;
-		mCollider.x = mPosX;
-	}
-	
-	// Move the dot up or down
-	mPosY += mVelY;
-	mCollider.y = mPosY;
-	
-	// If the dot collided or went too far up or down
-	if((mPosY < 0) || (mPosY + DOT_HEIGHT > SCREEN_HEIGHT) || checkCollision(mCollider, wall)) {
-		// Move back
-		mPosY -= mVelY;
-		mCollider.y = mPosY;
-	}
-}*/
-
-/*void Dot::render() {
-	// Show the dot
-	gDotTexture.render(mPosX, mPosY);
-}*/
 
 void Board::render() {
 	gBoardTexture.render(xPos, yPos);
-	for(short i = 0; i < 3; i++) {
-		for(short j = 0; j < 3; j++) {
-			moveArray[i][j]->render();
+}
+
+Move::Move() {
+	mPosition.x = 0;
+	mPosition.y = 0;
+	rowNum = 0;
+	colNum = 0;
+	
+	isClicked = false;
+	mCurrentSprite = NO_SPRITE;
+}
+
+void Move::setPosition(int x, int y) {
+	mPosition.x = x;
+	mPosition.y = y;
+}
+
+void Move::setArrayPos(int row, int col) {
+	rowNum = row;
+	colNum = col;
+}
+
+void Move::handleEvent(SDL_Event* e) {
+	if(e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP) {
+		// Get mouse position
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		
+		// Check if mouse is in button
+		bool inside = true;
+		
+		// Mouse is left of the button
+		if(x < mPosition.x) {
+			inside = false;
+		}
+		// Mouse is right of the button
+		else if(x > mPosition.x + MOVE_DIMENSION) {
+			inside = false;
+		}
+		// Mouse above the button
+		else if(y < mPosition.y) {
+			inside = false;
+		}
+		// Mouse below the button
+		else if(y > mPosition.y + MOVE_DIMENSION) {
+			inside = false;
+		}
+		
+		// Mouse is outside button
+		if(!inside) {
+			// Do nothing
+		}
+		// Mouse is inside button
+		else {
+			// Set mouse over sprite
+			switch(e->type) {
+				case SDL_MOUSEMOTION:
+					// Do nothing
+					break;
+					
+				case SDL_MOUSEBUTTONDOWN:
+					if(!isClicked) {
+						if(isXTurn) {
+							mCurrentSprite = X_SPRITE;
+						}
+						else {
+							mCurrentSprite = O_SPRITE;
+						}
+						isClicked = true;
+						isXTurn = !isXTurn;
+					}
+					break;
+					
+				case SDL_MOUSEBUTTONUP:
+					// Do nothing
+					break;
+			}
 		}
 	}
 }
 
 void Move::render() {
-	if(isEmpty) {
-		SDL_Rect emptyMove;
-			emptyMove.x = xPos;
-			emptyMove.y = yPos;
-			emptyMove.w = MOVE_DIMENSION;
-			emptyMove.h = MOVE_DIMENSION;
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-		SDL_RenderDrawRect(gRenderer, &emptyMove);
-	}
+	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	switch (mCurrentSprite) {
+		case X_SPRITE:
+			gXTexture.render(mPosition.x, mPosition.y);
+			break;
+		case O_SPRITE:
+			gOTexture.render(mPosition.x, mPosition.y);
+			break;
+		case NO_SPRITE:
+			SDL_RenderDrawRect(gRenderer, &gSpriteClips[rowNum][colNum]);
+			break;
+		}
 }
 
 bool init() {
@@ -435,14 +410,37 @@ bool init() {
 	return success;
 }
 
+int computePostion(int position) {
+	return SCREEN_BORDER_SIZE + (position * MOVE_DIMENSION) + ((position + 1) * MOVE_OUTER_BORDER_SIZE) + (position * MOVE_INNER_BORDER_SIZE);
+}
+
 bool loadMedia() {
 	// Loading success flag
 	bool success = true;
 	
-	// Load press texture
 	if(!gBoardTexture.loadFromFile("Board.png")) {
 		printf("Failed to load board texture!\n");
 		success = false;
+	}
+	else if(!gXTexture.loadFromFile("X.png")) {
+		printf("Failed to load X texture!\n");
+		success = false;
+	}
+	else if(!gOTexture.loadFromFile("O.png")) {
+		printf("Failed to load O texture!\n");
+		success = false;
+	}
+	else {
+		for(int i = 0; i < NUM_ROWS; i++) {
+			for(int j = 0; j < NUM_COLS; j++) {
+				gMoves[i][j].setPosition(computePostion(i), computePostion(j));
+				gMoves[i][j].setArrayPos(i, j);
+				gSpriteClips[i][j].x = computePostion(i);
+				gSpriteClips[i][j].y = computePostion(j);
+				gSpriteClips[i][j].w = MOVE_DIMENSION;
+				gSpriteClips[i][j].h = MOVE_DIMENSION;
+			}
+		}
 	}
 	
 	return success;
@@ -451,6 +449,8 @@ bool loadMedia() {
 void close() {
 	// Free loaded images
 	gBoardTexture.free();
+	gXTexture.free();
+	gOTexture.free();
 	
 	// Destroy window
 	SDL_DestroyRenderer(gRenderer);
@@ -462,46 +462,6 @@ void close() {
 	IMG_Quit();
 	SDL_Quit();
 }
-
-/*bool checkCollision(SDL_Rect a, SDL_Rect b) {
-	// The sides of the rectangles
-	int leftA, leftB;
-	int rightA, rightB;
-	int topA, topB;
-	int bottomA, bottomB;
-	
-	// Calculate the sides of rect A
-	leftA = a.x;
-	rightA = a.x + a.w;
-	topA = a.y;
-	bottomA = a.y + a.h;
-	
-	// Calculate the sides of rect B
-	leftB = b.x;
-	rightB = b.x + b.w;
-	topB = b.y;
-	bottomB = b.y + b.h;
-	
-	// If any of the sides from A are outside of B
-	if(bottomA <= topB) {
-		return false;
-	}
-	
-	if(topA >= bottomB) {
-		return false;
-	}
-	
-	if(rightA <= leftB) {
-		return false;
-	}
-	
-	if(leftA >= rightB) {
-		return false;
-	}
-	
-	// If none of the sides from A are outside B
-	return true;
-}*/
 
 int main(int argc, char* args[]) {
 	// Start up SDL and create window
@@ -519,17 +479,8 @@ int main(int argc, char* args[]) {
 			
 			// Event handler
 			SDL_Event e;
-			
-			// The dot that will be moving around on the screen
-			//Dot dot;
+
 			Board board;
-			
-			// Set the wall
-			/*SDL_Rect wall;
-			wall.x = 300;
-			wall.y = 40;
-			wall.w = 40;
-			wall.h = 400;*/
 			
 			// While application is running
 			while(!quit) {
@@ -540,25 +491,26 @@ int main(int argc, char* args[]) {
 						quit = true;
 					}
 					
-					// Handle input for the dot
-					//dot.handleEvent(e);
+					// Handle button events
+					for(int i = 0; i < NUM_ROWS; i++) {
+						for(int j = 0; j < NUM_COLS; j++) {
+							gMoves[i][j].handleEvent(&e);
+						}
+					}
 				}
-				
-				// Move the dot and check collision
-				//dot.move(wall);
 				
 				// Clear screen
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				SDL_RenderClear(gRenderer);
-				
-				// Render wall
-				/*SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
-				SDL_RenderDrawRect(gRenderer, &wall);*/
-				
-				// Render dot
-				//dot.render();
-				
+
 				board.render();
+				
+				// Render Moves
+				for(int i = 0; i < NUM_ROWS; i++) {
+					for(int j = 0; j < NUM_COLS; j++) {
+						gMoves[i][j].render();
+					}
+				}
 				
 				// Update screen
 				SDL_RenderPresent(gRenderer);
